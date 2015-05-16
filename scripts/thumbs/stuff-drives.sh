@@ -10,9 +10,11 @@ if [[ $(id -u) != 1000 ]]; then
 	exit 1
 fi
 
+EXCLUDE="--exclude .git"
+
 # Test to see if the ISO image has already been copied over at least once...
 if [[ -f "$MNT_BASE/sdb/iso/CentOS-7-x86_64-Everything-1503-01.iso" ]]; then
-	EXCLUDE="--exclude **.iso"
+	EXCLUDE="$EXCLUDE --exclude **.iso"
 fi
 
 cd $PHILES
