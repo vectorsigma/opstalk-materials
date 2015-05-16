@@ -13,7 +13,7 @@ No need to add a 7GB ISO to an otherwise tiny git repo.
 * `kickstart/` :: Contains the kickstart file we used for the boot strap node and the subsequent VMs
 * `salt-tree/` :: Contains the saltstack states we used to configure the bootstrap node
 * `scripts/` :: Contains the scripts we used to automatically build the demo VMs
-* `slides/` :: PDF and PPTx copies of our slide deck, with speaker notes for lulz.
+* `slides/` :: PDF copies of our slide deck
 
 ## Documentation Links
 
