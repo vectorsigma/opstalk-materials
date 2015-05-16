@@ -5,3 +5,5 @@ enable-common-services:
       - gpm
       - smartd
     - enable: True
+    - require:
+      - pkg: common-pkgs-latest

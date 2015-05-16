@@ -6,8 +6,8 @@
 # Control the salt minion configs
 salt-minon-conf:
   file.managed:
-    - name: /etc/salt/minion.d/example.conf
-    - source: salt://common/files/etc/salt/minion.d/example.conf
+    - name: /etc/salt/minion
+    - source: salt://compounds/common/files/etc/salt/minion
     - user: root
     - group: root
     - mode: '0600'
@@ -17,5 +17,5 @@ salt-minion-svc:
     - name: salt-minion
     - enable: True
     - watch:
-      - file: /etc/salt/minion.d/example.conf
+      - file: /etc/salt/minion
 
