@@ -17,3 +17,4 @@ fi
 
 cd $PHILES
 cat /proc/partitions | grep -v sda | egrep sd.$ | awk '{print $4}' | sort | xargs -Iblah -n1 -P 20 rsync -a $EXCLUDE ./ /mnt/thumbs/blah/
+cd -
