@@ -1,0 +1,14 @@
+default vesamenu.c32
+prompt 0
+timeout 100
+label local
+  menu label Boot from ^local drive
+  localboot 0xffff
+label memtest86
+  menu label ^Memory test
+  kernel memtest
+  append -
+label centos7
+  menu label ^CentOS 7
+  kernel c7/vmlinuz
+  append initrd=c7/initrd.img repo=http://{{ salt['grains.get']('ipv4','192.168.1.2')|first }}/os/centos/7/x86_64

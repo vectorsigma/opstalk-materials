@@ -1,0 +1,51 @@
+# dhcpd.conf
+# THIS FILE IS MANAGED BY SALT
+
+# option definitions common to all supported networks...
+option domain-name "example.com";
+option domain-name-servers 208.67.220.220, 208.67.222.222;
+
+default-lease-time 86400;
+max-lease-time 186400;
+
+# Use this to enble / disable dynamic dns updates globally.
+ddns-update-style none;
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+
+# Use this to send dhcp log messages to a different log file (you also
+# have to hack syslog.conf to complete the redirection).
+log-facility local7;
+
+# Allow a system to be given it's hostname from dhcpd.
+use-host-decl-names on;
+
+# Main private subnet declaration
+subnet 192.168.1.0 netmask 255.255.255.0 {
+	range 192.168.1.150 192.168.1.250;
+	option routers 192.168.1.1;
+	# if a PXE Client shows up, here's how to handle it.
+	class "pxeclients" {
+		match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
+		next-server {{ salt['grains.get']('ipv4')|first }};
+		filename "pxelinux.0";
+	}
+}
+{{ '' }}
+# Actual machines with reasonable OS's and such
+{{ '' }}
+{%- for host, data in salt['pillar.get']('machines','').iteritems()|sort -%}
+# {{ data['description'] }}
+{%- for type in [ 'wired', 'wireless' ] -%}
+{%- block loop_item scoped -%}
+{% if salt['pillar.get']('machines:' + host + ':' + type + ":mac") != '' %}
+host {{ host }}{%- if type == 'wireless' -%}-{{ type }}{%- endif -%}{{ '' }} {
+	hardware ethernet {{ salt['pillar.get']('machines:' + host + ':' + type + ":mac") }};
+	fixed-address {{ salt['pillar.get']('machines:' + host + ':' + type + ":ip") }};
+}
+{% endif %}
+{%- endblock -%}
+{% endfor %}
+{% endfor %}
