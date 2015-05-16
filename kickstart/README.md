@@ -8,14 +8,18 @@ Cribbed from [the official documentation](http://wiki.centos.org/HowTos/InstallF
 2. A copy of the CentOS 7 Everything ISO
 3. Internet access (duh)
 
-## Preparing the thumb drive
+## Preparing the installation thumb drive
 
 1. Plug in your thumb drive
 2. Become root
 3. dd the iso onto the thumb drive device directly.
 4. `sync && sync` for good luck.
-5. re-run partprobe to get the new partition information, or just unplug and replug the drive.
-6. Create a third partition on the drive with ~100MB of space for your kickstart and other custom things.
+
+## Preparing the second thumb drive
+
+*note:* when CentOS is installing, it mounts the entire thumb drive's device entry, not just the first partition.  Trying to create any additional partitions on that drive will result in failure. 
+
+6. Create a new on the new drive with ~100MB of space for your kickstart and salt tree.
 7. Format that with EXT4: `mke2fs -m0 -t ext4 -L turdrockfromthesun /dev/sdb3`
 8. Mount it: `mount /dev/sdb3 /mnt/derp`
 8. Copy your kickstart configuration files onto this newly formatted partition (like our example one in this directory!)
@@ -27,10 +31,12 @@ Cribbed from [the official documentation](http://wiki.centos.org/HowTos/InstallF
 
 ## Booting up the bootstrap node for the first time
 
-1. Plug in your thumb drive
-2. Boot your system off of it (varies by manufacturer which magic key, either F1, F2, Del or F12)
+1. Plug in your thumb drives
+2. Boot your system off of the first one (varies by manufacturer which magic key, either F1, F2, Del or F12)
 3. At the GRUB screen, you'll need to edit your boot options:
-  1. Add a ks=hd:0:/c7-x86_64-ks.cfg
+  1. Add a `ks=hd:sdb3:/c7-x86_64-ks.cfg`
+  2. Which device you use here depends entirely on the way your system detects them during boot.
+  3. You may want to boot up without any options just once, and then: `ls -l /dev/disk/by-label` to see what's where.
 4. Let the system install everything.
 5. Reboot
 6. Accept the local minion's salt key: `salt-key -A`
