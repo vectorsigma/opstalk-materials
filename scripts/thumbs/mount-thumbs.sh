@@ -28,7 +28,7 @@ fi
 # time to modify fstab, but first make the backup.
 cp -a /etc/fstab ${FSTAB_BACKUP}
 echo "# Thumb drive mount points" >> /etc/fstab
-for letter in {b..u}; do
+for letter in {b..k}; do
 	# Create the mountpoint on disk
 	MP="${MOUNT_BASE}/sd${letter}"
 	if [[ ! -d $MP ]]; then
